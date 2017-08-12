@@ -1,1 +1,4 @@
 language: csharp
+solution: Thinktecture.Abstractions.sln
+mono: none
+dotnet: 1.0.4
