@@ -12,7 +12,7 @@ function Dotnet-Pack([string]$dir)
 #calls dotnet test for all sub dirs of $dir
 function Dotnet-Test([string]$dir)
 {
-    $projDirs = Get-ChildItem $dir
+    $projDirs = Get-ChildItem $dir -Recurse -Filter *.csproj
 
     foreach($projDir in $projDirs)
     {
