@@ -1,3 +1,14 @@
+#calls dotnet pack for all sub dirs of $dir
+function Dotnet-Pack([string]$dir)
+{
+    $projDirs = Get-ChildItem $dir
+
+    foreach($projDir in $projDirs)
+    {
+        dotnet pack --configuration Release --no-build --include-symbols --output ./../../output $projDir.FullName;
+    }
+}
+
 # set version suffix if it is tag and the tag name contains a suffix like "beta1"
 function Set-VersionSuffixOnTag() 
 {
