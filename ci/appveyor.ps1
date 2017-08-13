@@ -16,7 +16,7 @@ function Dotnet-Test([string]$dir)
 
     foreach($projDir in $projDirs)
     {
-        dotnet test --configuration Release --no-build --logger 'C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll' $projDir.FullName;
+        dotnet test --configuration Release --no-build $projDir.FullName;
     }
 }
 
