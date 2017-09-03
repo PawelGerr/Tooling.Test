@@ -61,7 +61,7 @@ function Set-VersionSuffix([string]$dir, [string]$suffix)
     {
         $content = [xml](Get-Content $file.FullName)
        
-        $versionSuffix = $content.CreateElement("VersionSuffx");
+        $versionSuffix = $content.CreateElement("VersionSuffix");
         $versionSuffix.set_InnerXML($suffix)
         [void] $content.Project.PropertyGroup.AppendChild($versionSuffix)
         $content.Save($file.FullName);
