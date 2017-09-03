@@ -1,38 +1,55 @@
-﻿using System;
 using System.ComponentModel;
+using JetBrains.Annotations;
 
 namespace Thinktecture
 {
 	/// <summary>
 	/// Base class for all adapters.
 	/// </summary>
-	public class AbstractionAdapter : IAbstraction
+	/// <typeparam name="TImplementation">Type of the implementation.</typeparam>
+	public class AbstractionAdapter<TImplementation> : IAbstraction<TImplementation>
 	{
-		private readonly object _implementation;
-
-		/// <inheritdoc />
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public object UnsafeConvert()
-		{
-			return _implementation;
-		}
+		/// <summary>
+		/// Implementation used by the adapter.
+		/// </summary>
+		[NotNull]
+		protected TImplementation Implementation { get; }
 
 		/// <summary>
-		/// Initializes new instance of <see cref="AbstractionAdapter"/>.
+		/// Initializes new instance of <see cref="AbstractionAdapter{TImplementation}"/>.
 		/// </summary>
 		/// <param name="implementation">Implementation to be used by the adapter.</param>
-		public AbstractionAdapter(object implementation)
+		public AbstractionAdapter([NotNull] TImplementation implementation)
 		{
-			_implementation = implementation ?? throw new ArgumentNullException(nameof(implementation));
+			Implementation = implementation;
+		}
+
+		/// <inheritdoc />
+		[NotNull]
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public TImplementation UnsafeConvert()
+		{
+			return Implementation;
+		}
+
+		/// <inheritdoc />
+		[NotNull]
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		object IAbstraction.UnsafeConvert()
+		{
+			return UnsafeConvert();
 		}
 
 		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>A string that represents the current object.</returns>
+		// ReSharper disable once AnnotationRedundancyInHierarchy
+		[NotNull]
 		public override string ToString()
 		{
-			return _implementation.ToString();
+			// ReSharper disable once AssignNullToNotNullAttribute
+			return Implementation.ToString();
 		}
 
 		/// <summary>
@@ -40,15 +57,17 @@ namespace Thinktecture
 		/// </summary>
 		/// <param name="obj">The object to compare with the current object.</param>
 		/// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-		public override bool Equals(object obj)
+		// ReSharper disable once AnnotationRedundancyInHierarchy
+		public override bool Equals([CanBeNull] object obj)
 		{
 			// Use the inner implementation if and only if the other object is an adapter as well
 			// because equality must be reflexive, symmetric and transitive.
 
-			var abstraction = obj as IAbstraction;
+			if (obj is IAbstraction<TImplementation> abstraction)
+				return Implementation.Equals(abstraction.UnsafeConvert());
 
-			if (abstraction != null)
-				return _implementation.Equals(abstraction.UnsafeConvert());
+			if (obj is IAbstraction nonGenericAbstraction)
+				return Implementation.Equals(nonGenericAbstraction.UnsafeConvert());
 
 			// ReSharper disable once BaseObjectEqualsIsObjectEquals
 			return base.Equals(obj);
@@ -60,7 +79,7 @@ namespace Thinktecture
 		/// <returns>A hash code for the current object.</returns>
 		public override int GetHashCode()
 		{
-			return _implementation.GetHashCode();
+			return Implementation.GetHashCode();
 		}
 	}
 }

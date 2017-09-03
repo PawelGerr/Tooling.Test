@@ -1,6 +1,7 @@
-#if NETSTANDARD1_3 || NET45 || NET46
+#if NETSTANDARD1_3 || NET45
 
 using System.Net;
+using JetBrains.Annotations;
 using Thinktecture.Net;
 using Thinktecture.Net.Adapters;
 
@@ -18,9 +19,21 @@ namespace Thinktecture
 		/// </summary>
 		/// <param name="endPoint">Endpoint to convert.</param>
 		/// <returns>Converted endpoint.</returns>
-		public static IIPEndPoint ToInterface(this IPEndPoint endPoint)
+		[CanBeNull]
+		public static IIPEndPoint ToInterface([CanBeNull] this IPEndPoint endPoint)
 		{
 			return (endPoint == null) ? null : new IPEndPointAdapter(endPoint);
+		}
+
+		/// <summary>
+		/// Converts provided <see cref="IIPEndPoint"/> info to <see cref="IPEndPoint"/>.
+		/// </summary>
+		/// <param name="abstraction">Instance of <see cref="IIPEndPoint"/> to convert.</param>
+		/// <returns>An instance of <see cref="IPEndPoint"/>.</returns>
+		[CanBeNull]
+		public static IPEndPoint ToImplementation([CanBeNull] this IIPEndPoint abstraction)
+		{
+			return ((IAbstraction<IPEndPoint>)abstraction)?.UnsafeConvert();
 		}
 	}
 }

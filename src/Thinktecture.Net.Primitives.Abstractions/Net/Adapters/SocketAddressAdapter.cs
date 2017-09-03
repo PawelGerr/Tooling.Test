@@ -1,36 +1,26 @@
-﻿#if NETSTANDARD1_3 || NET45 || NET46
+#if NETSTANDARD1_3 || NET45
 
-using System;
-using System.ComponentModel;
 using System.Net;
 using System.Net.Sockets;
+using JetBrains.Annotations;
 
 namespace Thinktecture.Net.Adapters
 {
 	/// <summary>Stores serialized information from <see cref="T:System.Net.EndPoint" /> derived classes.</summary>
-	public class SocketAddressAdapter : AbstractionAdapter, ISocketAddress
+	public class SocketAddressAdapter : AbstractionAdapter<SocketAddress>, ISocketAddress
 	{
-		private readonly SocketAddress _address;
-
 		/// <inheritdoc />
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public new SocketAddress UnsafeConvert()
-		{
-			return _address;
-		}
-
-		/// <inheritdoc />
-		public AddressFamily Family => _address.Family;
+		public AddressFamily Family => Implementation.Family;
 
 		/// <inheritdoc />
 		public byte this[int offset]
 		{
-			get { return _address[offset]; }
-			set { _address[offset] = value; }
+			get => Implementation[offset];
+			set => Implementation[offset] = value;
 		}
 
 		/// <inheritdoc />
-		public int Size => _address.Size;
+		public int Size => Implementation.Size;
 
 		/// <summary>Creates a new instance of the <see cref="T:System.Net.SocketAddress" /> class for the given address family.</summary>
 		/// <param name="family">An <see cref="T:System.Net.Sockets.AddressFamily" /> enumerated value. </param>
@@ -51,13 +41,9 @@ namespace Thinktecture.Net.Adapters
 
 		/// <summary>Creates a new instance of the <see cref="T:System.Net.SocketAddress" /> class.</summary>
 		/// <param name="address">Address to be used by the adapter</param>
-		public SocketAddressAdapter(SocketAddress address)
+		public SocketAddressAdapter([NotNull] SocketAddress address)
 			: base(address)
 		{
-			if (address == null)
-				throw new ArgumentNullException(nameof(address));
-
-			_address = address;
 		}
 	}
 }

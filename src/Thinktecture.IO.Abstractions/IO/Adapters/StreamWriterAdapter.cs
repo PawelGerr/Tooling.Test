@@ -1,8 +1,11 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using JetBrains.Annotations;
 using Thinktecture.Text;
+
+// ReSharper disable AssignNullToNotNullAttribute
 
 namespace Thinktecture.IO.Adapters
 {
@@ -12,17 +15,21 @@ namespace Thinktecture.IO.Adapters
 	public class StreamWriterAdapter : TextWriterAdapter, IStreamWriter
 	{
 		/// <summary>Provides a StreamWriter with no backing store that can be written to, but not read from.</summary>
-		/// <filterpriority>1</filterpriority>
 		public new static readonly IStreamWriter Null = new StreamWriterAdapter(StreamWriter.Null);
 
 		/// <inheritdoc />
+		[NotNull]
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public new StreamWriter UnsafeConvert()
 		{
-			return _instance;
+			return Implementation;
 		}
 
-		private readonly StreamWriter _instance;
+		/// <summary>
+		/// Implementation used by the adapter.
+		/// </summary>
+		[NotNull]
+		protected new StreamWriter Implementation { get; }
 
 		/// <summary>Initializes a new instance of the <see cref="StreamWriterAdapter" /> class for the specified stream by using UTF-8 encoding and the default buffer size.</summary>
 		/// <param name="stream">The stream to write to. </param>
@@ -30,8 +37,8 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="stream" /> is not writable. </exception>
 		/// <exception cref="T:System.ArgumentNullException">
 		/// <paramref name="stream" /> is null. </exception>
-		public StreamWriterAdapter(IStream stream)
-			: this(new StreamWriter(stream.ToImplementation()))
+		public StreamWriterAdapter([NotNull] IStream stream)
+			: this(stream.ToImplementation())
 		{
 		}
 
@@ -41,7 +48,7 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="stream" /> is not writable. </exception>
 		/// <exception cref="T:System.ArgumentNullException">
 		/// <paramref name="stream" /> is null. </exception>
-		public StreamWriterAdapter(Stream stream)
+		public StreamWriterAdapter([NotNull] Stream stream)
 			: this(new StreamWriter(stream))
 		{
 		}
@@ -53,8 +60,8 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="stream" /> or <paramref name="encoding" /> is null. </exception>
 		/// <exception cref="T:System.ArgumentException">
 		/// <paramref name="stream" /> is not writable. </exception>
-		public StreamWriterAdapter(IStream stream, IEncoding encoding)
-			: this(new StreamWriter(stream.ToImplementation(), encoding.ToImplementation()))
+		public StreamWriterAdapter([NotNull] IStream stream, [NotNull] IEncoding encoding)
+			: this(stream.ToImplementation(), encoding.ToImplementation())
 		{
 		}
 
@@ -65,8 +72,8 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="stream" /> or <paramref name="encoding" /> is null. </exception>
 		/// <exception cref="T:System.ArgumentException">
 		/// <paramref name="stream" /> is not writable. </exception>
-		public StreamWriterAdapter(Stream stream, IEncoding encoding)
-			: this(new StreamWriter(stream, encoding.ToImplementation()))
+		public StreamWriterAdapter([NotNull] Stream stream, [NotNull] IEncoding encoding)
+			: this(stream, encoding.ToImplementation())
 		{
 		}
 
@@ -77,8 +84,8 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="stream" /> or <paramref name="encoding" /> is null. </exception>
 		/// <exception cref="T:System.ArgumentException">
 		/// <paramref name="stream" /> is not writable. </exception>
-		public StreamWriterAdapter(IStream stream, Encoding encoding)
-			: this(new StreamWriter(stream.ToImplementation(), encoding))
+		public StreamWriterAdapter([NotNull] IStream stream, [NotNull] Encoding encoding)
+			: this(stream.ToImplementation(), encoding)
 		{
 		}
 
@@ -89,7 +96,7 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="stream" /> or <paramref name="encoding" /> is null. </exception>
 		/// <exception cref="T:System.ArgumentException">
 		/// <paramref name="stream" /> is not writable. </exception>
-		public StreamWriterAdapter(Stream stream, Encoding encoding)
+		public StreamWriterAdapter([NotNull] Stream stream, [NotNull] Encoding encoding)
 			: this(new StreamWriter(stream, encoding))
 		{
 		}
@@ -104,8 +111,8 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="bufferSize" /> is negative. </exception>
 		/// <exception cref="T:System.ArgumentException">
 		/// <paramref name="stream" /> is not writable. </exception>
-		public StreamWriterAdapter(IStream stream, IEncoding encoding, int bufferSize)
-			: this(new StreamWriter(stream.ToImplementation(), encoding.ToImplementation(), bufferSize))
+		public StreamWriterAdapter([NotNull] IStream stream, [NotNull] IEncoding encoding, int bufferSize)
+			: this(stream.ToImplementation(), encoding.ToImplementation(), bufferSize)
 		{
 		}
 
@@ -119,8 +126,8 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="bufferSize" /> is negative. </exception>
 		/// <exception cref="T:System.ArgumentException">
 		/// <paramref name="stream" /> is not writable. </exception>
-		public StreamWriterAdapter(Stream stream, IEncoding encoding, int bufferSize)
-			: this(new StreamWriter(stream, encoding.ToImplementation(), bufferSize))
+		public StreamWriterAdapter([NotNull] Stream stream, [NotNull] IEncoding encoding, int bufferSize)
+			: this(stream, encoding.ToImplementation(), bufferSize)
 		{
 		}
 
@@ -134,8 +141,8 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="bufferSize" /> is negative. </exception>
 		/// <exception cref="T:System.ArgumentException">
 		/// <paramref name="stream" /> is not writable. </exception>
-		public StreamWriterAdapter(IStream stream, Encoding encoding, int bufferSize)
-			: this(new StreamWriter(stream.ToImplementation(), encoding, bufferSize))
+		public StreamWriterAdapter([NotNull] IStream stream, [NotNull] Encoding encoding, int bufferSize)
+			: this(stream.ToImplementation(), encoding, bufferSize)
 		{
 		}
 
@@ -149,7 +156,7 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="bufferSize" /> is negative. </exception>
 		/// <exception cref="T:System.ArgumentException">
 		/// <paramref name="stream" /> is not writable. </exception>
-		public StreamWriterAdapter(Stream stream, Encoding encoding, int bufferSize)
+		public StreamWriterAdapter([NotNull] Stream stream, [NotNull] Encoding encoding, int bufferSize)
 			: this(new StreamWriter(stream, encoding, bufferSize))
 		{
 		}
@@ -165,8 +172,8 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="bufferSize" /> is negative. </exception>
 		/// <exception cref="T:System.ArgumentException">
 		/// <paramref name="stream" /> is not writable. </exception>
-		public StreamWriterAdapter(IStream stream, IEncoding encoding, int bufferSize, bool leaveOpen)
-			: this(new StreamWriter(stream.ToImplementation(), encoding.ToImplementation(), bufferSize, leaveOpen))
+		public StreamWriterAdapter([NotNull] IStream stream, [NotNull] IEncoding encoding, int bufferSize, bool leaveOpen)
+			: this(stream.ToImplementation(), encoding.ToImplementation(), bufferSize, leaveOpen)
 		{
 		}
 
@@ -181,8 +188,8 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="bufferSize" /> is negative. </exception>
 		/// <exception cref="T:System.ArgumentException">
 		/// <paramref name="stream" /> is not writable. </exception>
-		public StreamWriterAdapter(Stream stream, IEncoding encoding, int bufferSize, bool leaveOpen)
-			: this(new StreamWriter(stream, encoding.ToImplementation(), bufferSize, leaveOpen))
+		public StreamWriterAdapter([NotNull] Stream stream, [NotNull] IEncoding encoding, int bufferSize, bool leaveOpen)
+			: this(stream, encoding.ToImplementation(), bufferSize, leaveOpen)
 		{
 		}
 
@@ -197,8 +204,8 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="bufferSize" /> is negative. </exception>
 		/// <exception cref="T:System.ArgumentException">
 		/// <paramref name="stream" /> is not writable. </exception>
-		public StreamWriterAdapter(IStream stream, Encoding encoding, int bufferSize, bool leaveOpen)
-			: this(new StreamWriter(stream.ToImplementation(), encoding, bufferSize, leaveOpen))
+		public StreamWriterAdapter([NotNull] IStream stream, [NotNull] Encoding encoding, int bufferSize, bool leaveOpen)
+			: this(stream.ToImplementation(), encoding, bufferSize, leaveOpen)
 		{
 		}
 
@@ -213,7 +220,7 @@ namespace Thinktecture.IO.Adapters
 		/// <paramref name="bufferSize" /> is negative. </exception>
 		/// <exception cref="T:System.ArgumentException">
 		/// <paramref name="stream" /> is not writable. </exception>
-		public StreamWriterAdapter(Stream stream, Encoding encoding, int bufferSize, bool leaveOpen)
+		public StreamWriterAdapter([NotNull] Stream stream, [NotNull] Encoding encoding, int bufferSize, bool leaveOpen)
 			: this(new StreamWriter(stream, encoding, bufferSize, leaveOpen))
 		{
 		}
@@ -222,20 +229,20 @@ namespace Thinktecture.IO.Adapters
 		/// Initializes a new instance of the <see cref="StreamWriterAdapter" /> class.
 		/// </summary>
 		/// <param name="writer">Writer to be used by the adapter.</param>
-		public StreamWriterAdapter(StreamWriter writer)
+		public StreamWriterAdapter([NotNull] StreamWriter writer)
 			: base(writer)
 		{
-			_instance = writer ?? throw new ArgumentNullException(nameof(writer));
+			Implementation = writer ?? throw new ArgumentNullException(nameof(writer));
 		}
 
 		/// <inheritdoc />
 		public bool AutoFlush
 		{
-			get => _instance.AutoFlush;
-			set => _instance.AutoFlush = value;
+			get => Implementation.AutoFlush;
+			set => Implementation.AutoFlush = value;
 		}
 
 		/// <inheritdoc />
-		public IStream BaseStream => _instance.BaseStream.ToInterface();
+		public IStream BaseStream => Implementation.BaseStream.ToInterface();
 	}
 }

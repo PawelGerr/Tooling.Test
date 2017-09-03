@@ -1,27 +1,25 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Thinktecture.IO
 {
 	/// <summary>
 	/// Represents a reader that can read a sequential series of characters.
 	/// </summary>
-	/// <filterpriority>2</filterpriority>
 	public interface ITextReader : IAbstraction<TextReader>, IDisposable
 	{
 		/// <summary>Reads the next character without changing the state of the reader or the character source. Returns the next available character without actually reading it from the reader.</summary>
 		/// <returns>An integer representing the next character to be read, or -1 if no more characters are available or the reader does not support seeking.</returns>
 		/// <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
 		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
-		/// <filterpriority>1</filterpriority>
 		int Peek();
 
 		/// <summary>Reads the next character from the text reader and advances the character position by one character.</summary>
 		/// <returns>The next character from the text reader, or -1 if no more characters are available. The default implementation returns -1.</returns>
 		/// <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
 		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
-		/// <filterpriority>1</filterpriority>
 		int Read();
 
 		/// <summary>Reads a specified maximum number of characters from the current reader and writes the data to a buffer, beginning at the specified index.</summary>
@@ -36,8 +34,7 @@ namespace Thinktecture.IO
 		/// <paramref name="index" /> or <paramref name="count" /> is negative. </exception>
 		/// <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
 		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
-		/// <filterpriority>1</filterpriority>
-		int Read(char[] buffer, int index, int count);
+		int Read([NotNull] char[] buffer, int index, int count);
 
 #pragma warning disable 1584, 1734
 		/// <summary>Reads a specified maximum number of characters from the current text reader asynchronously and writes the data to a buffer, beginning at the specified index. </summary>
@@ -52,7 +49,8 @@ namespace Thinktecture.IO
 		/// <exception cref="T:System.ArgumentException">The sum of <paramref name="index" /> and <paramref name="count" /> is larger than the buffer length.</exception>
 		/// <exception cref="T:System.ObjectDisposedException">The text reader has been disposed.</exception>
 		/// <exception cref="T:System.InvalidOperationException">The reader is currently in use by a previous read operation. </exception>
-		Task<int> ReadAsync(char[] buffer, int index, int count);
+		[NotNull]
+		Task<int> ReadAsync([NotNull] char[] buffer, int index, int count);
 #pragma warning restore 1584, 1734
 
 		/// <summary>Reads a specified maximum number of characters from the current text reader and writes the data to a buffer, beginning at the specified index.</summary>
@@ -67,8 +65,7 @@ namespace Thinktecture.IO
 		/// <paramref name="index" /> or <paramref name="count" /> is negative. </exception>
 		/// <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
 		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
-		/// <filterpriority>2</filterpriority>
-		int ReadBlock(char[] buffer, int index, int count);
+		int ReadBlock([NotNull] char[] buffer, int index, int count);
 
 #pragma warning disable 1584, 1734
 		/// <summary>Reads a specified maximum number of characters from the current text reader asynchronously and writes the data to a buffer, beginning at the specified index.</summary>
@@ -83,7 +80,8 @@ namespace Thinktecture.IO
 		/// <exception cref="T:System.ArgumentException">The sum of <paramref name="index" /> and <paramref name="count" /> is larger than the buffer length.</exception>
 		/// <exception cref="T:System.ObjectDisposedException">The text reader has been disposed.</exception>
 		/// <exception cref="T:System.InvalidOperationException">The reader is currently in use by a previous read operation. </exception>
-		Task<int> ReadBlockAsync(char[] buffer, int index, int count);
+		[NotNull]
+		Task<int> ReadBlockAsync([NotNull] char[] buffer, int index, int count);
 #pragma warning restore 1584, 1734
 
 		/// <summary>Reads a line of characters from the text reader and returns the data as a string.</summary>
@@ -92,7 +90,7 @@ namespace Thinktecture.IO
 		/// <exception cref="T:System.OutOfMemoryException">There is insufficient memory to allocate a buffer for the returned string. </exception>
 		/// <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
 		/// <exception cref="T:System.ArgumentOutOfRangeException">The number of characters in the next line is larger than <see cref="F:System.Int32.MaxValue" /></exception>
-		/// <filterpriority>1</filterpriority>
+		[CanBeNull]
 		string ReadLine();
 
 #pragma warning disable 1584, 1734
@@ -101,6 +99,7 @@ namespace Thinktecture.IO
 		/// <exception cref="T:System.ArgumentOutOfRangeException">The number of characters in the next line is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
 		/// <exception cref="T:System.ObjectDisposedException">The text reader has been disposed.</exception>
 		/// <exception cref="T:System.InvalidOperationException">The reader is currently in use by a previous read operation. </exception>
+		[NotNull]
 		Task<string> ReadLineAsync();
 #pragma warning restore 1584, 1734
 
@@ -110,7 +109,7 @@ namespace Thinktecture.IO
 		/// <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.IO.TextReader" /> is closed. </exception>
 		/// <exception cref="T:System.OutOfMemoryException">There is insufficient memory to allocate a buffer for the returned string. </exception>
 		/// <exception cref="T:System.ArgumentOutOfRangeException">The number of characters in the next line is larger than <see cref="F:System.Int32.MaxValue" /></exception>
-		/// <filterpriority>1</filterpriority>
+		[NotNull]
 		string ReadToEnd();
 
 #pragma warning disable 1584, 1734
@@ -119,6 +118,7 @@ namespace Thinktecture.IO
 		/// <exception cref="T:System.ArgumentOutOfRangeException">The number of characters is larger than <see cref="F:System.Int32.MaxValue" />.</exception>
 		/// <exception cref="T:System.ObjectDisposedException">The text reader has been disposed.</exception>
 		/// <exception cref="T:System.InvalidOperationException">The reader is currently in use by a previous read operation. </exception>
+		[NotNull]
 		Task<string> ReadToEndAsync();
 #pragma warning restore 1584, 1734
 	}

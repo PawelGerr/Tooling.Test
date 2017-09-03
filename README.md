@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)](https://ci.appveyor.com/project/PawelGerr/thinktecture-abstractions)
+
 Interfaces for commonly used .NET types like `File`, `Directory`, `Stream`, `Path`, `Math`, `Environment`, etc. to be able to extend or to change the standard behavior and for better testability.
 
 * The interfaces have the same API like the .NET types
@@ -72,7 +74,7 @@ Provides interfaces for types in `System.Net.NetworkInformation`: `NetworkInterf
 **Nuget**: `Install-Package Thinktecture.Net.NetworkInformation.Abstractions`
 
 ### Thinktecture.Net.Http.Abstractions
-Provides interfaces for types in `System.Net.Http`: `HttpClient`, `HttpContent`, `HttpRequestMessage`, `HttpResponseMessage`, `HttpHeaders`, `DelegatingHandler`, `HttpClientHandler`, `HttpMessageHandler`, `HttpMessageInvoker`, `MessageProcessingHandler`, `MultipartContent`, `MultipartFormDataContent`, `HttpContentHeaders`, `HttpRequestHeaders`, `HttpResponseHeaders`.
+Provides interfaces for types in `System.Net.Http`: `HttpClient`, `HttpContent`, `HttpRequestMessage`, `HttpResponseMessage`, `HttpHeaders`, `HttpHeaderValueCollection`, `DelegatingHandler`, `HttpClientHandler`, `HttpMessageHandler`, `HttpMessageInvoker`, `MessageProcessingHandler`, `MultipartContent`, `MultipartFormDataContent`, `HttpContentHeaders`, `HttpRequestHeaders`, `HttpResponseHeaders`.
 
 **Nuget**: `Install-Package Thinktecture.Net.Http.Abstractions`
 
@@ -107,11 +109,16 @@ Provides interfaces for type in `System.Runtime.Extensions`: `Path`, `BitConvert
 **Nuget**: `Install-Package Thinktecture.Runtime.Extensions.Abstractions`
 
 ### Thinktecture.Runtime.Handles.Abstractions
-Provides interfaces for types in `System.Runtime.Handles`: `SafeHandle`, `CriticalHandle`, `SafeWaitHandle`
+Provides interfaces for types in `System.Runtime.Handles`: `SafeHandle`, `SafeWaitHandle`
 
 **Nuget**: `Install-Package Thinktecture.Runtime.Handles.Abstractions`
 
 ### Thinktecture.Runtime.Abstractions
-Provides interfaces for types in `System.Runtime`: `StringBuilder`, `WaitHandle`, `EventArgs`.
+Provides interfaces for types in `System.Runtime`: `StringBuilder`, `EventArgs`.
 
 **Nuget**: `Install-Package Thinktecture.Runtime.Abstractions`
+
+### Thinktecture.Threading.Tasks.Abstractions
+Provides interfaces for types in `System.Threading.Tasks`: `Task`, `Task<T>`, `TaskFactory`, `TaskFactory<T>`.
+
+**Nuget**: `Install-Package Thinktecture.Threading.Tasks.Abstractions`

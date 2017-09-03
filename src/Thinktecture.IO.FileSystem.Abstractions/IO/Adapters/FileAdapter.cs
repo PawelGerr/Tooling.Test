@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Thinktecture.Text;
+
+// ReSharper disable AssignNullToNotNullAttribute
 
 namespace Thinktecture.IO.Adapters
 {
@@ -28,7 +30,7 @@ namespace Thinktecture.IO.Adapters
 		{
 			File.AppendAllLines(path, contents, encoding);
 		}
-		
+
 		/// <inheritdoc />
 		public void AppendAllText(string path, string contents)
 		{

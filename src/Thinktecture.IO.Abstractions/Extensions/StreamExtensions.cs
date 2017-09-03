@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.IO;
+using JetBrains.Annotations;
 using Thinktecture.IO;
 using Thinktecture.IO.Adapters;
 
@@ -16,9 +17,16 @@ namespace Thinktecture
 		/// </summary>
 		/// <param name="stream">Stream to convert.</param>
 		/// <returns>Converted stream.</returns>
-		public static IStream ToInterface(this Stream stream)
+		[CanBeNull]
+		public static IStream ToInterface([CanBeNull] this Stream stream)
 		{
-			return (stream == null) ? null : new StreamAdapter(stream);
+			if (stream == null)
+				return null;
+
+			if (ReferenceEquals(stream, Stream.Null))
+				return StreamAdapter.Null;
+
+			return new StreamAdapter(stream);
 		}
 	}
 }

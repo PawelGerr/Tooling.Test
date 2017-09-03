@@ -1,7 +1,7 @@
-#if NETSTANDARD1_1 || NETSTANDARD1_3 || NET45 || NET46
+#if NETSTANDARD1_1 || NETSTANDARD1_3 || NET45
 
-using System;
 using System.Net;
+using JetBrains.Annotations;
 using Thinktecture.Net;
 using Thinktecture.Net.Adapters;
 
@@ -18,7 +18,8 @@ namespace Thinktecture
 		/// </summary>
 		/// <param name="cache">Cache to convert.</param>
 		/// <returns>Converted cache.</returns>
-		public static ICredentialCache ToInterface(this CredentialCache cache)
+		[CanBeNull]
+		public static ICredentialCache ToInterface([CanBeNull] this CredentialCache cache)
 		{
 			return (cache == null) ? null : new CredentialCacheAdapter(cache);
 		}

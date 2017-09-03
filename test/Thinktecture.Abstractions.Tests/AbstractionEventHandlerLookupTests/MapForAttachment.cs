@@ -1,15 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Xunit;
 
 namespace Thinktecture.AbstractionEventHandlerLookupTests
 {
 	public class MapForAttachment
 	{
+		[NotNull]
 		private readonly AbstractionEventHandlerLookup<ITestAbstraction, TestImplementation> _lookup;
 
 		public MapForAttachment()
@@ -28,7 +30,7 @@ namespace Thinktecture.AbstractionEventHandlerLookupTests
 		public void Should_throw_argnull_if_convert_callback_is_null()
 		{
 			_lookup.Invoking(l => l.MapForAttachment((sender, abstraction) => { }, null))
-				.ShouldThrow<ArgumentNullException>();
+					.ShouldThrow<ArgumentNullException>();
 		}
 
 		[Fact]

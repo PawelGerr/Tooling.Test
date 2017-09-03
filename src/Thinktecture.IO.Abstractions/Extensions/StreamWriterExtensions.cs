@@ -1,5 +1,5 @@
-﻿using System;
 using System.IO;
+using JetBrains.Annotations;
 using Thinktecture.IO;
 using Thinktecture.IO.Adapters;
 
@@ -16,9 +16,16 @@ namespace Thinktecture
 		/// </summary>
 		/// <param name="writer">Writer to convert.</param>
 		/// <returns>Converted writer.</returns>
-		public static IStreamWriter ToInterface(this StreamWriter writer)
+		[CanBeNull]
+		public static IStreamWriter ToInterface([CanBeNull] this StreamWriter writer)
 		{
-			return (writer == null) ? null : new StreamWriterAdapter(writer);
+			if (writer == null)
+				return null;
+
+			if (ReferenceEquals(writer, StreamWriter.Null))
+				return StreamWriterAdapter.Null;
+
+			return new StreamWriterAdapter(writer);
 		}
 
 		/// <summary>
@@ -26,7 +33,8 @@ namespace Thinktecture
 		/// </summary>
 		/// <param name="abstraction">Instance of <see cref="IStreamWriter"/> to convert.</param>
 		/// <returns>An instance of <see cref="StreamWriter"/>.</returns>
-		public static StreamWriter ToImplementation(this IStreamWriter abstraction)
+		[CanBeNull]
+		public static StreamWriter ToImplementation([CanBeNull] this IStreamWriter abstraction)
 		{
 			return ((IAbstraction<StreamWriter>)abstraction)?.UnsafeConvert();
 		}

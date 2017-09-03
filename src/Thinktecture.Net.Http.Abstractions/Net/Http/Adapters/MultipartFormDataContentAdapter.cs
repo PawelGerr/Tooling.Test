@@ -1,18 +1,23 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Net.Http;
+using JetBrains.Annotations;
 
 namespace Thinktecture.Net.Http.Adapters
 {
 	/// <summary>Provides a container for content encoded using multipart/form-data MIME type.</summary>
 	public class MultipartFormDataContentAdapter : MultipartContentAdapter, IMultipartFormDataContent
 	{
-		private readonly MultipartFormDataContent _content;
+		/// <summary>
+		/// Implementation used by the adapter.
+		/// </summary>
+		[NotNull]
+		protected new MultipartFormDataContent Implementation { get; }
 
 		/// <inheritdoc />
-		[EditorBrowsable(EditorBrowsableState.Never)]
+		[NotNull, EditorBrowsable(EditorBrowsableState.Never)]
 		public new MultipartFormDataContent UnsafeConvert()
 		{
-			return _content;
+			return Implementation;
 		}
 
 		/// <summary>Creates a new instance of the <see cref="T:System.Net.Http.MultipartFormDataContent" /> class.</summary>
@@ -25,16 +30,17 @@ namespace Thinktecture.Net.Http.Adapters
 		/// <param name="boundary">The boundary string for the multipart form data content.</param>
 		/// <exception cref="T:System.ArgumentException">The <paramref name="boundary" /> was null or contains only white space characters.-or-The <paramref name="boundary" /> ends with a space character.</exception>
 		/// <exception cref="T:System.OutOfRangeException">The length of the <paramref name="boundary" /> was greater than 70.</exception>
-		public MultipartFormDataContentAdapter(string boundary)
+		public MultipartFormDataContentAdapter([NotNull] string boundary)
 			: this(new MultipartFormDataContent(boundary))
 		{
 		}
 
 		/// <summary>Creates a new instance of the <see cref="MultipartFormDataContentAdapter" /> class.</summary>
-		public MultipartFormDataContentAdapter(MultipartFormDataContent content)
+		/// <param name="content">The implementation to use by the adapter.</param>
+		public MultipartFormDataContentAdapter([NotNull] MultipartFormDataContent content)
 			: base(content)
 		{
-			_content = content;
+			Implementation = content;
 		}
 
 		/// <summary>Add HTTP content to a collection of <see cref="T:System.Net.Http.HttpContent" /> objects that get serialized to multipart/form-data MIME type.</summary>
@@ -44,7 +50,7 @@ namespace Thinktecture.Net.Http.Adapters
 		/// <exception cref="T:System.ArgumentNullException">The <paramref name="content" /> was null.</exception>
 		public void Add(HttpContent content, string name)
 		{
-			_content.Add(content, name);
+			Implementation.Add(content, name);
 		}
 
 		/// <summary>Add HTTP content to a collection of <see cref="T:System.Net.Http.HttpContent" /> objects that get serialized to multipart/form-data MIME type.</summary>
@@ -54,7 +60,7 @@ namespace Thinktecture.Net.Http.Adapters
 		/// <exception cref="T:System.ArgumentNullException">The <paramref name="content" /> was null.</exception>
 		public void Add(IHttpContent content, string name)
 		{
-			_content.Add(content.ToImplementation(), name);
+			Implementation.Add(content.ToImplementation(), name);
 		}
 
 		/// <summary>Add HTTP content to a collection of <see cref="T:System.Net.Http.HttpContent" /> objects that get serialized to multipart/form-data MIME type.</summary>
@@ -65,7 +71,7 @@ namespace Thinktecture.Net.Http.Adapters
 		/// <exception cref="T:System.ArgumentNullException">The <paramref name="content" /> was null.</exception>
 		public void Add(HttpContent content, string name, string fileName)
 		{
-			_content.Add(content, name, fileName);
+			Implementation.Add(content, name, fileName);
 		}
 
 		/// <summary>Add HTTP content to a collection of <see cref="T:System.Net.Http.HttpContent" /> objects that get serialized to multipart/form-data MIME type.</summary>
@@ -76,7 +82,7 @@ namespace Thinktecture.Net.Http.Adapters
 		/// <exception cref="T:System.ArgumentNullException">The <paramref name="content" /> was null.</exception>
 		public void Add(IHttpContent content, string name, string fileName)
 		{
-			_content.Add(content.ToImplementation(), name, fileName);
+			Implementation.Add(content.ToImplementation(), name, fileName);
 		}
 	}
 }

@@ -1,119 +1,126 @@
 using System;
 using System.ComponentModel;
 using System.Net.Http.Headers;
+using JetBrains.Annotations;
+
+// ReSharper disable AssignNullToNotNullAttribute
 
 namespace Thinktecture.Net.Http.Headers.Adapters
 {
 	/// <summary>Represents the collectionof Response Headers as defined in RFC 2616.</summary>
 	public class HttpResponseHeadersAdapter : HttpHeadersAdapter, IHttpResponseHeaders
 	{
-		private readonly HttpResponseHeaders _headers;
+		/// <summary>
+		/// Implementation used by the adapter.
+		/// </summary>
+		[NotNull]
+		protected new HttpResponseHeaders Implementation { get; }
 
 		/// <inheritdoc />
-		[EditorBrowsable(EditorBrowsableState.Never)]
+		[NotNull, EditorBrowsable(EditorBrowsableState.Never)]
 		public new HttpResponseHeaders UnsafeConvert()
 		{
-			return _headers;
+			return Implementation;
 		}
 
 		/// <inheritdoc />
-		public HttpHeaderValueCollection<string> AcceptRanges => _headers.AcceptRanges;
+		public IHttpHeaderValueCollection<string> AcceptRanges => Implementation.AcceptRanges.ToInterface();
 
 		/// <inheritdoc />
 		public TimeSpan? Age
 		{
-			get => _headers.Age;
-			set => _headers.Age = value;
+			get => Implementation.Age;
+			set => Implementation.Age = value;
 		}
 
 		/// <inheritdoc />
 		public EntityTagHeaderValue ETag
 		{
-			get => _headers.ETag;
-			set => _headers.ETag = value;
+			get => Implementation.ETag;
+			set => Implementation.ETag = value;
 		}
 
 		/// <inheritdoc />
 		public Uri Location
 		{
-			get => _headers.Location;
-			set => _headers.Location = value;
+			get => Implementation.Location;
+			set => Implementation.Location = value;
 		}
 
 		/// <inheritdoc />
-		public HttpHeaderValueCollection<AuthenticationHeaderValue> ProxyAuthenticate => _headers.ProxyAuthenticate;
+		public IHttpHeaderValueCollection<AuthenticationHeaderValue> ProxyAuthenticate => Implementation.ProxyAuthenticate.ToInterface();
 
 		/// <inheritdoc />
 		public RetryConditionHeaderValue RetryAfter
 		{
-			get => _headers.RetryAfter;
-			set => _headers.RetryAfter = value;
+			get => Implementation.RetryAfter;
+			set => Implementation.RetryAfter = value;
 		}
 
 		/// <inheritdoc />
-		public HttpHeaderValueCollection<ProductInfoHeaderValue> Server => _headers.Server;
+		public IHttpHeaderValueCollection<ProductInfoHeaderValue> Server => Implementation.Server.ToInterface();
 
 		/// <inheritdoc />
-		public HttpHeaderValueCollection<string> Vary => _headers.Vary;
+		public IHttpHeaderValueCollection<string> Vary => Implementation.Vary.ToInterface();
 
 		/// <inheritdoc />
-		public HttpHeaderValueCollection<AuthenticationHeaderValue> WwwAuthenticate => _headers.WwwAuthenticate;
+		public IHttpHeaderValueCollection<AuthenticationHeaderValue> WwwAuthenticate => Implementation.WwwAuthenticate.ToInterface();
 
 		/// <inheritdoc />
 		public CacheControlHeaderValue CacheControl
 		{
-			get => _headers.CacheControl;
-			set => _headers.CacheControl = value;
+			get => Implementation.CacheControl;
+			set => Implementation.CacheControl = value;
 		}
 
 		/// <inheritdoc />
-		public HttpHeaderValueCollection<string> Connection => _headers.Connection;
+		public IHttpHeaderValueCollection<string> Connection => Implementation.Connection.ToInterface();
 
 		/// <inheritdoc />
 		public bool? ConnectionClose
 		{
-			get => _headers.ConnectionClose;
-			set => _headers.ConnectionClose = value;
+			get => Implementation.ConnectionClose;
+			set => Implementation.ConnectionClose = value;
 		}
 
 		/// <inheritdoc />
 		public DateTimeOffset? Date
 		{
-			get => _headers.Date;
-			set => _headers.Date = value;
+			get => Implementation.Date;
+			set => Implementation.Date = value;
 		}
 
 		/// <inheritdoc />
-		public HttpHeaderValueCollection<NameValueHeaderValue> Pragma => _headers.Pragma;
+		public IHttpHeaderValueCollection<NameValueHeaderValue> Pragma => Implementation.Pragma.ToInterface();
 
 		/// <inheritdoc />
-		public HttpHeaderValueCollection<string> Trailer => _headers.Trailer;
+		public IHttpHeaderValueCollection<string> Trailer => Implementation.Trailer.ToInterface();
 
 		/// <inheritdoc />
-		public HttpHeaderValueCollection<TransferCodingHeaderValue> TransferEncoding => _headers.TransferEncoding;
+		public IHttpHeaderValueCollection<TransferCodingHeaderValue> TransferEncoding => Implementation.TransferEncoding.ToInterface();
 
 		/// <inheritdoc />
 		public bool? TransferEncodingChunked
 		{
-			get => _headers.TransferEncodingChunked;
-			set => _headers.TransferEncodingChunked = value;
+			get => Implementation.TransferEncodingChunked;
+			set => Implementation.TransferEncodingChunked = value;
 		}
 
 		/// <inheritdoc />
-		public HttpHeaderValueCollection<ProductHeaderValue> Upgrade => _headers.Upgrade;
+		public IHttpHeaderValueCollection<ProductHeaderValue> Upgrade => Implementation.Upgrade.ToInterface();
 
 		/// <inheritdoc />
-		public HttpHeaderValueCollection<ViaHeaderValue> Via => _headers.Via;
+		public IHttpHeaderValueCollection<ViaHeaderValue> Via => Implementation.Via.ToInterface();
 
 		/// <inheritdoc />
-		public HttpHeaderValueCollection<WarningHeaderValue> Warning => _headers.Warning;
+		public IHttpHeaderValueCollection<WarningHeaderValue> Warning => Implementation.Warning.ToInterface();
 
 		/// <summary>Initializes a new instance of the <see cref="HttpResponseHeaders" /> class.</summary>
 		/// <param name="headers">Http headers to be use by the adapter.</param>
-		public HttpResponseHeadersAdapter(HttpResponseHeaders headers)
+		public HttpResponseHeadersAdapter([NotNull] HttpResponseHeaders headers)
 			: base(headers)
 		{
-			_headers = headers ?? throw new ArgumentNullException(nameof(headers));
+			Implementation = headers ?? throw new ArgumentNullException(nameof(headers));
 		}
 	}
 }

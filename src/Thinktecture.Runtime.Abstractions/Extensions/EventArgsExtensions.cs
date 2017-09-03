@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using JetBrains.Annotations;
 using Thinktecture.Adapters;
 
 // ReSharper disable once CheckNamespace
@@ -14,9 +15,16 @@ namespace Thinktecture
 		/// </summary>
 		/// <param name="args"><see cref="EventArgs"/> to convert.</param>
 		/// <returns>An instance of <see cref="IEventArgs"/>.</returns>
-		public static IEventArgs ToInterface(this EventArgs args)
+		[CanBeNull]
+		public static IEventArgs ToInterface([CanBeNull] this EventArgs args)
 		{
-			return (args == null) ? null : new EventArgsAdapter(args);
+			if (args == null)
+				return null;
+
+			if (ReferenceEquals(args, EventArgs.Empty))
+				return EventArgsAdapter.Empty;
+
+			return new EventArgsAdapter(args);
 		}
 	}
 }

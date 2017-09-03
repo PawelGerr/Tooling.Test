@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.IO;
+using JetBrains.Annotations;
 using Thinktecture.IO;
 using Thinktecture.IO.Adapters;
 
@@ -16,9 +17,16 @@ namespace Thinktecture
 		/// </summary>
 		/// <param name="writer">Writer to convert.</param>
 		/// <returns>Converted writer.</returns>
-		public static ITextWriter ToInterface(this TextWriter writer)
+		[CanBeNull]
+		public static ITextWriter ToInterface([CanBeNull] this TextWriter writer)
 		{
-			return (writer == null) ? null : new TextWriterAdapter(writer);
+			if (writer == null)
+				return null;
+
+			if (ReferenceEquals(writer, TextWriter.Null))
+				return TextWriterAdapter.Null;
+
+			return new TextWriterAdapter(writer);
 		}
 	}
 }

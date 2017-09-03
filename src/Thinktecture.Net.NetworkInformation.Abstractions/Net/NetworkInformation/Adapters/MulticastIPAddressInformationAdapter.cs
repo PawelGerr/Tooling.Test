@@ -1,8 +1,9 @@
-﻿#if NETSTANDARD1_3 || NET45 || NET46
+#if NETSTANDARD1_3 || NET45 || NET46
 
 using System;
 using System.ComponentModel;
 using System.Net.NetworkInformation;
+using JetBrains.Annotations;
 
 namespace Thinktecture.Net.NetworkInformation.Adapters
 {
@@ -12,44 +13,45 @@ namespace Thinktecture.Net.NetworkInformation.Adapters
 	// ReSharper disable once InconsistentNaming
 	public class MulticastIPAddressInformationAdapter : IPAddressInformationAdapter, IMulticastIPAddressInformation
 	{
-		private readonly MulticastIPAddressInformation _info;
+		/// <summary>
+		/// Implementation used by the adapter.
+		/// </summary>
+		[NotNull]
+		protected new MulticastIPAddressInformation Implementation { get; }
 
 		/// <inheritdoc />
-		public long AddressPreferredLifetime => _info.AddressPreferredLifetime;
+		public long AddressPreferredLifetime => Implementation.AddressPreferredLifetime;
 
 		/// <inheritdoc />
-		public long AddressValidLifetime => _info.AddressValidLifetime;
+		public long AddressValidLifetime => Implementation.AddressValidLifetime;
 
 		/// <inheritdoc />
-		public long DhcpLeaseLifetime => _info.DhcpLeaseLifetime;
+		public long DhcpLeaseLifetime => Implementation.DhcpLeaseLifetime;
 
 		/// <inheritdoc />
-		public DuplicateAddressDetectionState DuplicateAddressDetectionState => _info.DuplicateAddressDetectionState;
+		public DuplicateAddressDetectionState DuplicateAddressDetectionState => Implementation.DuplicateAddressDetectionState;
 
 		/// <inheritdoc />
-		public PrefixOrigin PrefixOrigin => _info.PrefixOrigin;
+		public PrefixOrigin PrefixOrigin => Implementation.PrefixOrigin;
 
 		/// <inheritdoc />
-		public SuffixOrigin SuffixOrigin => _info.SuffixOrigin;
+		public SuffixOrigin SuffixOrigin => Implementation.SuffixOrigin;
 
 		/// <summary>
 		/// Initializes new instance of <see cref="MulticastIPAddressInformationAdapter"/>.
 		/// </summary>
 		/// <param name="info">Information to be used by the adapter.</param>
-		public MulticastIPAddressInformationAdapter(MulticastIPAddressInformation info) 
+		public MulticastIPAddressInformationAdapter([NotNull] MulticastIPAddressInformation info)
 			: base(info)
 		{
-			if (info == null)
-				throw new ArgumentNullException(nameof(info));
-
-			_info = info;
+			Implementation = info ?? throw new ArgumentNullException(nameof(info));
 		}
 
 		/// <inheritdoc />
-		[EditorBrowsable(EditorBrowsableState.Never)]
+		[NotNull, EditorBrowsable(EditorBrowsableState.Never)]
 		public new MulticastIPAddressInformation UnsafeConvert()
 		{
-			return _info;
+			return Implementation;
 		}
 	}
 }
