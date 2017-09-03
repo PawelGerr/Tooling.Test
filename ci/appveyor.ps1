@@ -21,7 +21,7 @@ function Dotnet-Test([string]$dir)
 }
 
 # set version suffix if it is tag and the tag name contains a suffix like "beta1"
-function Set-VersionSuffixOnTag($dir) 
+function Set-VersionSuffixOnTag([string]$dir) 
 {
     if($env:APPVEYOR_REPO_TAG -eq "true")
     {
@@ -29,7 +29,7 @@ function Set-VersionSuffixOnTag($dir)
     
         if(![string]::IsNullOrWhiteSpace($suffix))
         {
-            Set-VersionSuffix($dir, $suffix)   
+            Set-VersionSuffix $dir $suffix
         }
     }
 }
@@ -49,7 +49,7 @@ function Extract-Suffix([string] $tagName)
 }
 
 # Add xml element "VersionSuffix" to *.csproj files in $dir.
-function Set-VersionSuffix($dir, [string]$suffix)
+function Set-VersionSuffix([string]$dir, [string]$suffix)
 {
     Write-Host "Setting version suffix to '$suffix'"
 
